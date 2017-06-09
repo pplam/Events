@@ -7,6 +7,7 @@ end
 
 gem 'bootstrap-sass'
 gem 'devise'
+gem 'jquery-rails'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

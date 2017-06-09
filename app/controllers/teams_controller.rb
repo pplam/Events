@@ -1,5 +1,7 @@
 class TeamsController < ApplicationController
-  before_action :set_team, only: [:show, :edit, :update, :destroy]
+  before_action :set_team, only: [:show, :edit, :update, :destroy, :accept_user_join, :remove_team_user]
+  before_action :authenticate_user!
+  before_action :require_permission, only: [:edit, :update, :destroy, :accept_user_join, :remove_team_user]
 
   # GET /teams
   # GET /teams.json
@@ -21,13 +23,30 @@ class TeamsController < ApplicationController
   def edit
   end
 
+  # PUT /teams/1/accept_user/1
+  def accept_user_join
+    @team.team_users.where(user_id: params[:user_id])
+      .first
+      .update_attribute(:accepted, true)
+    redirect_back(fallback_location: @team)
+  end
+
+  # DELETE /teams/1/remove_user/1
+  def remove_team_user
+    @team.team_users.where(user_id: params[:user_id])
+      .first.destroy
+    redirect_back(fallback_location: @team)
+  end
+
   # POST /teams
   # POST /teams.json
   def create
     @team = Team.new(team_params)
+    @team.owner = current_user
 
     respond_to do |format|
       if @team.save
+        @team.add_member current_user
         format.html { redirect_to @team, notice: 'Team was successfully created.' }
         format.json { render :show, status: :created, location: @team }
       else
@@ -70,5 +89,12 @@ class TeamsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def team_params
       params.require(:team).permit(:name)
+    end
+
+    # Check current user permission
+    def require_permission
+      unless @team.owner == current_user
+        redirect_back fallback_location: teams_url
+      end
     end
 end

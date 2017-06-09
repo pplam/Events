@@ -1,9 +1,95 @@
+<% if_owner = current_user == @team.owner %>
+<% applied_users = @team.members(false) %>
+<% accepted_users = @team.members(true) %>
+
+<h1 align="center"><%= @team.name %></h1>
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @team.name %>
-</p>
+<p align="center">owner: <%= @team.owner.name %>, created at: <%= @team.created_at %></p>
 
-<%= link_to 'Edit', edit_team_path(@team) %> |
-<%= link_to 'Back', teams_path %>
+<div class="container">
+  <div class="row">
+    <div class=<%= if_owner ? "col-md-6" : "" %>>
+      <h3>Users Joined</h3>
+      <table id="members">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Applied time</th>
+            <th>Accepted time</th>
+            <% if if_owner %>
+              <th colspan="1"></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if if_owner %>
+            <% accepted_users.each do |member| %>
+              <tr id=<% member.id %>>
+                <td><%= member.name %></td>
+                <td><%= member.applied_time %></td>
+                <td><%= member.accepted_time %></td>
+                <td><%= link_to 'Remove', remove_team_user_path(id: @team.id, user_id: member.id), method: :delete, class: "btn btn-danger" %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <% accepted_users.each do |member| %>
+              <tr id=<% member.id %>>
+                <td><%= member.name %></td>
+                <td><%= member.applied_time %></td>
+                <td><%= member.accepted_time %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% if if_owner %>
+      <div class="col-md-6">
+        <h3>Users applied</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Applied time</th>
+              <th colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% applied_users.each do |member| %>
+              <tr>
+                <td><%= member.name %></td>
+                <td><%= member.applied_time %></td>
+                <td><%= link_to 'Accept join', accept_user_join_path(id: @team.id, user_id: member.id), method: :put, class: "btn btn-primary" %></td>
+                <td><%= link_to 'Remove', remove_team_user_path(id: @team.id, user_id: member.id), method: :delete, class: "btn btn-danger" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+  <div class="row">
+    <%= link_to 'Go back', teams_path, class: "btn btn-secondary btn-lg button button-outline-gray" %>
+    <% if if_owner %>
+      <%= link_to 'Edit it', edit_team_path, class: "btn btn-primary btn-lg button button-outline-blue" %>
+      <%= link_to 'Delete', @team, method: :delete, class: "btn btn-danger btn-lg button button-outline-red" %>
+    <% end %>
+  </div>
+</div>
+
+<%# <% if if_owner %>
+  <!-- <script>
+    // (() => {
+    //   // const members = JSON.parse(<%#= accepted_users.to_json %>)
+    //   const teamId = parseInt('<%#= @team.id %>')
+    //   const memberRows = document.querySelectorAll('table#members tr')
+    //   Array.prototype.call(memberRows, (tr) => {
+    //     const trId = getAttribute('id')
+    //     const newTd = document.createElement('td')
+    //     newTd.innerHTML = `<%#= link_to "Remove", remove_team_user_path(id: ${teamId}, user_id: ${trId}), method: :delete, class: "btn btn-danger" %>`
+    //     tr.appendChild(newTd)
+    //   })
+    // })()
+  </script> -->
+<%# <% end %>
