@@ -1,6 +1,8 @@
 <% if_owner = current_user == @team.owner %>
 <% applied_users = @team.members(false) %>
 <% accepted_users = @team.members(true) %>
+<% if_member = accepted_users.include?(current_user) %>
+<% projects = @team.projects %>
 
 <h1 align="center"><%= @team.name %></h1>
 <p id="notice"><%= notice %></p>
@@ -15,6 +17,7 @@
         <thead>
           <tr>
             <th>Name</th>
+            <th>Email</th>
             <th>Applied time</th>
             <th>Accepted time</th>
             <% if if_owner %>
@@ -27,6 +30,7 @@
             <% accepted_users.each do |member| %>
               <tr id=<% member.id %>>
                 <td><%= member.name %></td>
+                <td><%= member.email %></td>
                 <td><%= member.applied_time %></td>
                 <td><%= member.accepted_time %></td>
                 <td><%= link_to 'Remove', remove_team_user_path(id: @team.id, user_id: member.id), method: :delete, class: "btn btn-danger" %></td>
@@ -36,6 +40,7 @@
             <% accepted_users.each do |member| %>
               <tr id=<% member.id %>>
                 <td><%= member.name %></td>
+                <td><%= member.email %></td>
                 <td><%= member.applied_time %></td>
                 <td><%= member.accepted_time %></td>
               </tr>
@@ -51,6 +56,7 @@
           <thead>
             <tr>
               <th>Name</th>
+              <th>Email</th>
               <th>Applied time</th>
               <th colspan="2"></th>
             </tr>
@@ -59,6 +65,7 @@
             <% applied_users.each do |member| %>
               <tr>
                 <td><%= member.name %></td>
+                <td><%= member.email %></td>
                 <td><%= member.applied_time %></td>
                 <td><%= link_to 'Accept join', accept_user_join_path(id: @team.id, user_id: member.id), method: :put, class: "btn btn-primary" %></td>
                 <td><%= link_to 'Remove', remove_team_user_path(id: @team.id, user_id: member.id), method: :delete, class: "btn btn-danger" %></td>
@@ -69,10 +76,46 @@
       </div>
     <% end %>
   </div>
+</div>
+
+<% if if_member %>
+  <div class="container">
+    <div class="row">
+      <h3>Projects</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Created at</th>
+            <th>Updated at</th>
+            <th colspan="1"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% projects.each do |project| %>
+            <% if_accessable =  project.users.include?(current_user) %>
+            <tr>
+              <td><%= project.name %></td>
+              <td><%= project.owner.name %></td>
+              <td><%= project.created_at %></td>
+              <td><%= project.updated_at %></td>
+              <td><%= link_to 'Show', project, class: "btn btn-primary button" + (if_accessable ? " button-outline-green" : " button-outline-gray disabled") %></td>
+            </tr>
+          <% end %>
+       </tbody>
+      </table>
+      <br>
+      <%= link_to 'Create project', new_project_path(team_id: @team.id), class: "btn btn-primary btn-lg btn-block button button-blue" %>
+    </div>
+  </div>
+<% end %>
+
+<div class="container">
   <div class="row">
     <%= link_to 'Go back', teams_path, class: "btn btn-secondary btn-lg button button-outline-gray" %>
     <% if if_owner %>
-      <%= link_to 'Edit it', edit_team_path, class: "btn btn-primary btn-lg button button-outline-blue" %>
+      <%= link_to 'Edit it', edit_team_path(@team), class: "btn btn-primary btn-lg button button-outline-blue" %>
       <%= link_to 'Delete', @team, method: :delete, class: "btn btn-danger btn-lg button button-outline-red" %>
     <% end %>
   </div>

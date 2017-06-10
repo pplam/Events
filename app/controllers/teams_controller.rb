@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
-  before_action :set_team, only: [:show, :edit, :update, :destroy, :accept_user_join, :remove_team_user]
+  before_action :set_team, only: [:show, :edit, :update, :destroy, :accept_user_join, :remove_team_user, :add_member]
   before_action :authenticate_user!
-  before_action :require_permission, only: [:edit, :update, :destroy, :accept_user_join, :remove_team_user]
+  before_action :require_permission, only: [:edit, :update, :destroy, :accept_user_join, :remove_team_user, :add_member]
 
   # GET /teams
   # GET /teams.json
@@ -17,10 +17,12 @@ class TeamsController < ApplicationController
   # GET /teams/new
   def new
     @team = Team.new
+    @back_url = session[:previous_url] || teams_path
   end
 
   # GET /teams/1/edit
   def edit
+    @back_url = session[:previous_url] || @team
   end
 
   # PUT /teams/1/accept_user/1
@@ -35,6 +37,15 @@ class TeamsController < ApplicationController
   def remove_team_user
     @team.team_users.where(user_id: params[:user_id])
       .first.destroy
+    redirect_back(fallback_location: @team)
+  end
+
+  # PUT /teams/1/add_member
+  def add_member
+    if params[:user_id]
+      user = User.find(params[:user_id])
+      @team.add_member user
+    end
     redirect_back(fallback_location: @team)
   end
 

@@ -29,10 +29,11 @@ Rails.application.routes.draw do
   }, only: :passwords
 
   put 'users/apply_join_team/:team_id', to: 'users#apply_join_team', as: :apply_join_team
-
   put 'teams/:id/accept_user_join/:user_id', to: 'teams#accept_user_join', as: :accept_user_join
-
   delete 'teams/:id/remove_team_user/:user_id', to: 'teams#remove_team_user', as: :remove_team_user
+
+  put 'projects/:id/admit_user', to: 'projects#admit_user', as: :admit_user
+  delete 'projects/:id/remove_access/:user_id', to: 'projects#remove_access', as: :remove_access
 
   resources :comments
   resources :todos

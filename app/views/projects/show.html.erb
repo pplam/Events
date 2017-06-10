@@ -1,14 +1,67 @@
+<% if_owner = current_user == @project.owner %>
+<% members = @project.team.members(true) %>
+<% people = @project.people %>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @project.name %>
-</p>
+<h1 align="center"><%= @project.name %></h1>
 
-<p>
-  <strong>Team:</strong>
-  <%= @project.team %>
-</p>
+<p align="center">team: <%= @project.team.name %>, owner: <%= @project.owner.name %>, created at: <%= @project.created_at %></p>
 
-<%= link_to 'Edit', edit_project_path(@project) %> |
-<%= link_to 'Back', projects_path %>
+<div class="container">
+  <div class="row">
+    <h3>People</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Join time</th>
+            <% if if_owner %>
+              <th colspan="1"></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% if if_owner %>
+            <% people.each do |user| %>
+              <tr>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td><%= user.join_time %></td>
+                <td><%= link_to 'Remove', remove_access_path(id: @project.id, user_id: user.id), method: :delete, class: "btn btn-danger" %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <% people.each do |user| %>
+              <tr>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td><%= user.join_time %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+  <% if if_owner %>
+    <div class="row">
+      <%= form_with url: admit_user_path(id: @project.id), method: :put, local: true, html: {class: "form-inline"} do |form| %>
+        <%= form.select :user_id, (members - people).collect { |m| [ m.name, m.id ] }, {blank: 'Pick a member'}, {class: "form-control form-control-lg"} %>
+        <%= form.submit 'Add user', class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<br><br>
+
+<div class="container">
+  <div class="row">
+    <%= link_to 'Go back', @project.team, class: "btn btn-secondary btn-lg button button-outline-gray" %>
+    <% if if_owner %>
+      <%= link_to 'Edit it', edit_project_path(@project), class: "btn btn-primary btn-lg button button-outline-blue" %>
+      <%= link_to 'Delete', @project, method: :delete, class: "btn btn-danger btn-lg button button-outline-red" %>
+    <% end %>
+  </div>
+</div>
