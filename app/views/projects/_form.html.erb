@@ -11,17 +11,17 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :team %>
+  <div class="ffield">
+    <%= form.label :team, class: 'flabel' %>
     <div class="col-sm-8">
-      <%= form.text_field :team_name, id: :project_team_name, value: @team.name, class: "form-control form-control-lg", readonly: true %>
+      <%= form.text_field :team_name, id: :project_team_name, value: @team.name, class: 'fcontrol', readonly: true %>
     </div>
   </div>
 
-  <div class="field">
-    <%= form.label :name %>
+  <div class="ffield">
+    <%= form.label :name, class: 'flabel' %>
     <div class="col-sm-8">
-      <%= form.text_field :name, id: :project_name, class: "form-control form-control-lg" %>
+      <%= form.text_field :name, id: :project_name, class: 'fcontrol' %>
     </div>
   </div>
 

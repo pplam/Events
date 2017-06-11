@@ -11,31 +11,31 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :content %>
+  <div class="ffield">
+    <%= form.label :content, class: 'flabel' %>
     <div class="col-sm-8">
-      <%= form.text_field :content, id: :todo_content, class: "form-control form-control-lg" %>
+      <%= form.text_field :content, id: :todo_content, class: "fcontrol" %>
     </div>
   </div>
 
-  <div class="field">
-    <%= form.label :deadline %>
+  <div class="ffield">
+    <%= form.label :deadline, class: 'flabel' %>
     <div class="col-sm-8">
-      <%= form.date_select :deadline, id: :todo_deadline, class: "form-control form-control-lg" %>
+      <%= form.date_select :deadline, id: :todo_deadline, class: 'fcontrol' %>
     </div>
   </div>
 
-  <div class="field">
-    <%= form.label :project %>
+  <div class="ffield">
+    <%= form.label :project, class: 'flabel' %>
     <div class="col-sm-8">
-      <%= form.text_field :project_name, id: :todo_project_name, value: @project.name, class: "form-control form-control-lg", readonly: true  %>
+      <%= form.text_field :project_name, id: :todo_project_name, value: @project.name, class:  'fcontrol', readonly: true  %>
     </div>
   </div>
 
-  <div class="field">
-    <%= form.label :executor_id %>
+  <div class="ffield">
+    <%= form.label :executor_id, class: 'flabel' %>
     <div class="col-sm-8">
-      <%= form.select :executor_id, @project.users.collect { |u| [ u.name, u.id ] }, {blank: 'Pick a member'}, {id: :todo_executor_id, class: "form-control form-control-lg"} %>
+      <%= form.select :executor_id, @project.users.collect { |u| [ u.name, u.id ] }, {blank: 'Pick a member'}, {id: :todo_executor_id, class: 'fcontrol'} %>
     </div>
   </div>
 

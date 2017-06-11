@@ -15,19 +15,24 @@ $(document).on('turbolinks:load', () => {
 
   const fms = document.getElementsByTagName('form')
   Array.prototype.forEach.call(fms, (fm) => {
-    const fds = fm.querySelectorAll('div.field')
+    const fds = fm.querySelectorAll('.ffield')
     Array.prototype.forEach.call(fds, (fd) => {
-      fd.className += ' form-group row'
+      fd.className = 'field form-group row'
     })
 
-    const lbs = fm.querySelectorAll('label')
+    const lbs = fm.querySelectorAll('.flabel')
     Array.prototype.forEach.call(lbs, (lb) => {
       lb.className = 'col-sm-1 col-form-label col-form-label-lg'
     })
 
+    const cts = fm.querySelectorAll('.fcontrol')
+    Array.prototype.forEach.call(cts, (ct) => {
+      ct.className = 'form-control form-control-lg'
+    })
+
     const cc = fm.querySelector('#cancel')
-    cc.className = 'btn btn-secondary btn-lg button button-outline-gray'
+    if (cc) cc.className = 'btn btn-secondary btn-lg button button-outline-gray'
     const sm = fm.querySelector('#submit')
-    sm.className = 'btn btn-primary btn-lg button button-outline-blue'
+    if (sm) sm.className = 'btn btn-primary btn-lg button button-outline-blue'
   })
 })

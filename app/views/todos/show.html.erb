@@ -33,6 +33,8 @@
   </p>
 </div>
 
+<br><br>
+
 <div class="container">
   <%= form_with(model: [ @comment, Comment.new ], url: comments_path, method: :post, local: true) do |form| %>
     <div class="field">
@@ -62,6 +64,8 @@
     <% end %>
   </ul>
 </div>
+
+<br><br>
 
 <div class="container">
   <div class="row">

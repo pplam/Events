@@ -100,7 +100,7 @@
               <td><%= project.owner.name %></td>
               <td><%= project.created_at %></td>
               <td><%= project.updated_at %></td>
-              <td><%= link_to 'Show', project, class: "btn btn-primary button" + (if_accessable ? " button-outline-green" : " button-outline-gray disabled") %></td>
+              <td><%= link_to 'Show', project, class: "btn" + (if_accessable ? " btn-success" : " btn-secondary disabled") %></td>
             </tr>
           <% end %>
        </tbody>

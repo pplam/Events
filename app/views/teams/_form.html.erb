@@ -11,15 +11,15 @@
     </div>
   <% end %>
 
-  <div class="field form-group row">
-    <%= form.label :name,  class: "col-sm-1 col-form-label col-form-label-lg" %>
+  <div class="ffield">
+    <%= form.label :name,  class: "flabel" %>
     <div class="col-sm-8">
-      <%= form.text_field :name, id: :team_name, class: "form-control form-control-lg" %>
+      <%= form.text_field :name, id: :team_name, class: 'fcontrol' %>
     </div>
   </div>
 
   <div class="actions">
-    <%= form.submit class: "btn btn-primary btn-lg button button-outline-blue" %>
-    <%= link_to 'Cancel', @back_url, class: "btn btn-secondary btn-lg button button-outline-gray" %>
+    <%= form.submit id: "submit" %>
+    <%= link_to 'Cancel', @back_url, id: "cancel" %>
   </div>
 <% end %>

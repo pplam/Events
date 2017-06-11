@@ -19,8 +19,8 @@
       <tr>
         <td><%= team.name %></td>
         <td><%= team.owner.name %></td>
-        <td><%= link_to 'Show', team, class: "btn btn-primary button" + (team.members(true).include?(current_user) ? " button-outline-green" : " button-gray disabled") %></td>
-        <td><%= link_to 'Apply join', apply_join_team_path(team_id: team.id), method: :put, class: "join btn btn-primary button" + (team.users.where(id: current_user.id).any? ? " button-gray disabled" : " button-green") %></td>
+        <td><%= link_to 'Show', team, class: "btn" + (team.members(true).include?(current_user) ? " btn-success" : " btn-secondary disabled") %></td>
+        <td><%= link_to 'Apply join', apply_join_team_path(team_id: team.id), method: :put, class: "join btn" + (team.users.where(id: current_user.id).any? ? " btn-secondary disabled" : " btn-success") %></td>
       </tr>
     <% end %>
   </tbody>
