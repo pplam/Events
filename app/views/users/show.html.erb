@@ -1,19 +1,142 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @user.name %>
-</p>
+<h1 align="center"><%= @user.name %></h1>
+<p align="center">email: <%= @user.email %>, registered at: <%= @user.created_at %></p>
 
-<p>
-  <strong>Avatar:</strong>
-  <%= @user.avatar %>
-</p>
+<div class="container">
+  <div class="row">
+    <h3>Own teams</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Created at</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user.own_teams.each do |team| %>
+          <tr>
+            <td><%= team.name %></td>
+            <td><%= team.created_at %></td>
+            <td><%= link_to 'Show', team, class: "btn btn-success" %></td>
+            <td><%= link_to 'Delete', team, method: :delete, class: "btn btn-danger" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <h3>Joined teams</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Owner</th>
+          <th>Created at</th>
+          <th>Applied time</th>
+          <th>Accepted time</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user.in_teams(true).each do |team| %>
+          <tr>
+            <td><%= team.name %></td>
+            <td><%= team.owner.name %></td>
+            <td><%= team.created_at %></td>
+            <td><%= team.applied_time %></td>
+            <td><%= team.accepted_time %></td>
+            <td><%= link_to 'Show', team, class: "btn btn-success" %></td>
+            <td><%= link_to 'Quit', unapply_join_team_path(team_id: team.id), method: :delete, class: "btn btn-danger" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <h3>Applied teams</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>owner</th>
+          <th>Created at</th>
+          <th>Applied time</th>
+          <th colspan="1"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user.in_teams(false).each do |team| %>
+          <tr>
+            <td><%= team.name %></td>
+            <td><%= team.owner.name %></td>
+            <td><%= team.created_at %></td>
+            <td><%= team.applied_time %></td>
+            <td><%= link_to 'Undo apply', unapply_join_team_path(team_id: team.id), method: :delete, class: "btn btn-danger" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-<p>
-  <strong>Team:</strong>
-  <%= @user.team %>
-</p>
+
+<div class="container">
+  <div class="row">
+    <h3>Own projects</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Team</th>
+          <th>Created at</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user.own_projects.each do |project| %>
+          <tr>
+            <td><%= project.name %></td>
+            <td><%= project.team.name %></td>
+            <td><%= project.created_at %></td>
+            <td><%= link_to 'Show', project, class: "btn btn-success" %></td>
+            <td><%= link_to 'Delete', project, method: :delete, class: "btn btn-danger" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <h3>Accessable projects</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Team</th>
+          <th>Owner</th>
+          <th>Created at</th>
+          <th>Joined time</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user.accesses.includes(:project).each do |access| %>
+          <tr>
+            <td><%= access.project.name %></td>
+            <td><%= access.project.team.name %></td>
+            <td><%= access.project.owner.name %></td>
+            <td><%= access.project.created_at %></td>
+            <td><%= access.created_at %></td>
+            <td><%= link_to 'Show', access.project, class: "btn btn-success" %></td>
+            <td><%= link_to 'Quit', quit_project_path(project_id: access.project.id), method: :delete, class: "btn btn-danger" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

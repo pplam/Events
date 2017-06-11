@@ -1,9 +1,29 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :require_permission, only: [:show, :edit, :update, :destroy]
 
   # PUT /join_team/1
   def apply_join_team
     Team.find(params[:team_id]).users << current_user
+  end
+
+  # DELETE /unapply_join_team/1
+  def unapply_join_team
+    tu = current_user.team_users.where(team_id: params[:team_id]).first
+    if tu
+      tu.destroy
+    end
+    redirect_back(fallback_location: current_user)
+  end
+
+  # DELETE /quit_project/1
+  def quit_project
+    access = current_user.accesses.where(project_id: params[:project_id]).first
+    if access
+      access.destroy
+    end
+    redirect_back(fallback_location: current_user)
   end
 
   # GET /users
@@ -75,5 +95,11 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:name, :avatar)
+    end
+
+    def require_permission
+      unless @user == current_user
+        redirect_back fallback_location: current_user
+      end
     end
 end

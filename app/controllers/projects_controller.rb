@@ -81,7 +81,7 @@ class ProjectsController < ApplicationController
     team = @project.team
     @project.destroy
     respond_to do |format|
-      format.html { redirect_to team, notice: 'Project was successfully destroyed.' }
+      format.html { redirect_back fallback_location: team, notice: 'Project was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -35,6 +35,9 @@ Rails.application.routes.draw do
   put 'projects/:id/admit_user', to: 'projects#admit_user', as: :admit_user
   delete 'projects/:id/remove_access/:user_id', to: 'projects#remove_access', as: :remove_access
 
+  delete 'users/unapply_join_team/:team_id', to: 'users#unapply_join_team', as: :unapply_join_team
+  delete 'users/quit_project/:project_id', to: 'users#quit_project', as: :quit_project
+
   resources :comments
   resources :todos
   resources :accesses
