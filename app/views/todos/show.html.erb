@@ -1,34 +1,74 @@
+<% if_owner = current_user == @todo.creator %>
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Content:</strong>
-  <%= @todo.content %>
-</p>
+<div class="container", style="background-color:#2E8B57">
+  <p>
+    <strong>Project:</strong>
+    <%= @todo.project.name %>
+  </p>
 
-<p>
-  <strong>Deadline:</strong>
-  <%= @todo.deadline %>
-</p>
+  <p>
+    <strong>Deadline:</strong>
+    <%= @todo.deadline %>
+  </p>
 
-<p>
-  <strong>Status:</strong>
-  <%= @todo.status %>
-</p>
+  <p>
+    <strong>Creator:</strong>
+    <%= @todo.creator.name %>
+  </p>
 
-<p>
-  <strong>Project:</strong>
-  <%= @todo.project %>
-</p>
+  <p>
+    <strong>Executor:</strong>
+    <%= @todo.executor.name %>
+  </p>
 
-<p>
-  <strong>Creator:</strong>
-  <%= @todo.creator_id %>
-</p>
+  <p>
+    <strong>Status:</strong>
+    <%= @todo.status %>
+  </p>
 
-<p>
-  <strong>Executor:</strong>
-  <%= @todo.executor_id %>
-</p>
+  <p>
+    <strong>Content:</strong>
+    <%= @todo.content %>
+  </p>
+</div>
 
-<%= link_to 'Edit', edit_todo_path(@todo) %> |
-<%= link_to 'Back', todos_path %>
+<div class="container">
+  <%= form_with(model: [ @comment, Comment.new ], url: comments_path, method: :post, local: true) do |form| %>
+    <div class="field">
+      <%= form.hidden_field :todo_id, id: :comment_todo_id, value: @todo.id %>
+    </div>
+    <div class="field">
+      <%= form.hidden_field :user_id, id: :comment_user_id, value: current_user.id %>
+    </div>
+    <div class="field">
+      <%= form.text_area :content, id: :comment_content, size: '24x6', class: "form-control form-control-lg", style: "background-color:#D3D3D3" %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit id: "submit", class: "btn-primary" %>
+    </div>
+  <% end %>
+</div>
+
+<br><br><br>
+
+<div class="container", style="background-color:#BDB76B">
+  <ul>
+    <% @todo.comments.order(created_at: :desc).each do |comment| %>
+      <li>
+        <strong><%= comment.user.name %>:</strong><pre style="word-wrap:break-word;"><%= comment.content %>    --<%= comment.created_at %></pre>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<div class="container">
+  <div class="row">
+    <%= link_to 'Go back', @todo.project, class: "btn btn-secondary btn-lg button button-outline-gray" %>
+    <% if if_owner || @todo.project.owner == current_user %>
+      <%= link_to 'Edit it', edit_todo_path(@todo), class: "btn btn-primary btn-lg button button-outline-blue" %>
+      <%= link_to 'Delete', @todo, method: :delete, class: "btn btn-danger btn-lg button button-outline-red" %>
+    <% end %>
+  </div>
+</div>

@@ -54,6 +54,40 @@
   <% end %>
 </div>
 
+<div class="container">
+  <div class="row">
+    <h3>Todos</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Deadline</th>
+          <th>Creator</th>
+          <th>Executor</th>
+          <th>Content</th>
+          <th>Created at</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @project.todos.each do |todo| %>
+          <tr>
+            <td><%= todo.deadline %></td>
+            <td><%= todo.creator.name %></td>
+            <td><%= todo.executor ? todo.executor.name : "" %></td>
+            <td><%= todo.content %></td>
+            <td><%= todo.created_at %></td>
+            <td><%= link_to 'Show', todo, class: "btn btn-success" %></td>
+            <% if current_user == todo.creator || if_owner %>
+              <td><%= link_to 'Delete', todo, method: :delete, class: "btn btn-danger" %></td>
+          <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= link_to 'Create todo', new_todo_path(project_id: @project.id), class: "btn btn-primary btn-lg btn-block button button-blue" %>
+  </div>
+</div>
+
 <br><br>
 
 <div class="container">

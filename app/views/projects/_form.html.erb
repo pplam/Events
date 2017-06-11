@@ -11,15 +11,15 @@
     </div>
   <% end %>
 
-  <div class="field form-group row">
-    <%= form.label :team, class: "col-sm-1 col-form-label col-form-label-lg" %>
+  <div class="field">
+    <%= form.label :team %>
     <div class="col-sm-8">
       <%= form.text_field :team_name, id: :project_team_name, value: @team.name, class: "form-control form-control-lg", readonly: true %>
     </div>
   </div>
 
-  <div class="field form-group row">
-    <%= form.label :name, class: "col-sm-1 col-form-label col-form-label-lg" %>
+  <div class="field">
+    <%= form.label :name %>
     <div class="col-sm-8">
       <%= form.text_field :name, id: :project_name, class: "form-control form-control-lg" %>
     </div>
@@ -30,7 +30,7 @@
   </div>
 
   <div class="actions">
-    <%= form.submit class: "btn btn-primary btn-lg button button-outline-blue" %>
-    <%= link_to 'Cancel', @back_url, class: "btn btn-secondary btn-lg button button-outline-gray" %>
+    <%= form.submit id: "submit" %>
+    <%= link_to 'Cancel', @back_url, id: "cancel" %>
   </div>
 <% end %>

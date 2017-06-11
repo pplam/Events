@@ -13,35 +13,42 @@
 
   <div class="field">
     <%= form.label :content %>
-    <%= form.text_field :content, id: :todo_content %>
+    <div class="col-sm-8">
+      <%= form.text_field :content, id: :todo_content, class: "form-control form-control-lg" %>
+    </div>
   </div>
 
   <div class="field">
     <%= form.label :deadline %>
-    <%= form.date_select :deadline, id: :todo_deadline %>
+    <div class="col-sm-8">
+      <%= form.date_select :deadline, id: :todo_deadline, class: "form-control form-control-lg" %>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :status %>
-    <%= form.text_field :status, id: :todo_status %>
-  </div>
-
-  <div class="field">
-    <%= form.label :project_id %>
-    <%= form.text_field :project_id, id: :todo_project_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :creator_id %>
-    <%= form.number_field :creator_id, id: :todo_creator_id %>
+    <%= form.label :project %>
+    <div class="col-sm-8">
+      <%= form.text_field :project_name, id: :todo_project_name, value: @project.name, class: "form-control form-control-lg", readonly: true  %>
+    </div>
   </div>
 
   <div class="field">
     <%= form.label :executor_id %>
-    <%= form.number_field :executor_id, id: :todo_executor_id %>
+    <div class="col-sm-8">
+      <%= form.select :executor_id, @project.users.collect { |u| [ u.name, u.id ] }, {blank: 'Pick a member'}, {id: :todo_executor_id, class: "form-control form-control-lg"} %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.hidden_field :project_id, id: :todo_project_id, value: @project.id %>
+  </div>
+
+  <div class="field">
+    <%= form.hidden_field :creator_id, id: :todo_creator_id, value: current_user.id %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit id: "submit" %>
+    <%= link_to 'Cancel', @back_url, id: "cancel" %>
   </div>
 <% end %>

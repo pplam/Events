@@ -15,10 +15,14 @@ class TodosController < ApplicationController
   # GET /todos/new
   def new
     @todo = Todo.new
+    @project = Project.find(params[:project_id]) if params[:project_id]
+    @back_url = session[:previous_url] || @project
   end
 
   # GET /todos/1/edit
   def edit
+    @project = @todo.project
+    @back_url = session[:previous_url] || @todo
   end
 
   # POST /todos
@@ -54,9 +58,10 @@ class TodosController < ApplicationController
   # DELETE /todos/1
   # DELETE /todos/1.json
   def destroy
+    project = @todo.project
     @todo.destroy
     respond_to do |format|
-      format.html { redirect_to todos_url, notice: 'Todo was successfully destroyed.' }
+      format.html { redirect_to project, notice: 'Todo was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

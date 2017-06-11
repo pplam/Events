@@ -1,7 +1,7 @@
 class Project < ApplicationRecord
   belongs_to :team
   belongs_to :owner, foreign_key: :owner_id, class_name: :User
-  has_many :todos
+  has_many :todos, dependent: :destroy
   has_many :accesses, dependent: :destroy
   has_many :users, through: :accesses
   def people
