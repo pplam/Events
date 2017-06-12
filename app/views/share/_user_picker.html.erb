@@ -1,0 +1,4 @@
+<%= form_with url: path, method: :put, local: true, html: {class: "form-inline"} do |form| %>
+  <%= form.select field_name, users.collect { |u| [ u.name, u.id ] }, {blank: 'Pick a member'}, {class: control_style_class} %>
+  <%= form.submit btn_text, class: "btn btn-primary" %>
+<% end %>

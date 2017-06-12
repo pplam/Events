@@ -46,10 +46,7 @@
   </div>
   <% if if_owner %>
     <div class="row">
-      <%= form_with url: admit_user_path(id: @project.id), method: :put, local: true, html: {class: "form-inline"} do |form| %>
-        <%= form.select :user_id, (members - people).collect { |m| [ m.name, m.id ] }, {blank: 'Pick a member'}, {class: "form-control form-control-lg"} %>
-        <%= form.submit 'Add user', class: "btn btn-primary" %>
-      <% end %>
+      <%= render partial: 'share/user_picker', locals: {field_name: :user_id, users: (members - people), path: admit_user_path(id: @project.id), control_style_class: "form-control form-control-lg", btn_text: 'Add user'} %>
     </div>
   <% end %>
 </div>
@@ -61,21 +58,29 @@
       <thead>
         <tr>
           <th>Deadline</th>
+          <th>Status</th>
           <th>Creator</th>
           <th>Executor</th>
           <th>Content</th>
           <th>Created at</th>
-          <th colspan="2"></th>
+          <th colspan="5"></th>
         </tr>
       </thead>
       <tbody>
         <% @project.todos.each do |todo| %>
           <tr>
             <td><%= todo.deadline %></td>
+            <td><%= todo.status %></td>
             <td><%= todo.creator.name %></td>
             <td><%= todo.executor ? todo.executor.name : "" %></td>
             <td><%= todo.content %></td>
             <td><%= todo.created_at %></td>
+            <% if current_user == todo.creator || if_owner %>
+              <td><%= render partial: 'share/user_picker', locals: { field_name: :executor_id, users: people, path: assign_executor_path(id: todo.id), control_style_class: "form-control", btn_text: 'Assign executor' } %><td>
+            <% end %>
+            <% if current_user == todo.creator || current_user == todo.executor || if_owner %>
+              <td><%= link_to 'Finish', finish_todo_path(id: todo.id), method: :put, class: "btn btn-primary" %></td>
+            <% end %>
             <td><%= link_to 'Show', todo, class: "btn btn-success" %></td>
             <% if current_user == todo.creator || if_owner %>
               <td><%= link_to 'Delete', todo, method: :delete, class: "btn btn-danger" %></td>

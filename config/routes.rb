@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :events
   devise_scope :user do
     authenticated :user do
       root 'teams#index', as: :authenticated_root
@@ -37,6 +38,10 @@ Rails.application.routes.draw do
 
   delete 'users/unapply_join_team/:team_id', to: 'users#unapply_join_team', as: :unapply_join_team
   delete 'users/quit_project/:project_id', to: 'users#quit_project', as: :quit_project
+
+  put 'todos/:id/assign_executor', to: 'todos#assign_executor', as: :assign_executor
+  put 'todos/:id/finish', to: 'todos#finish', as: :finish_todo
+  put 'todos/:id/update_deadline', to: 'todos#update_deadline', as: :update_deadline
 
   resources :comments
   resources :todos

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170610115621) do
+ActiveRecord::Schema.define(version: 20170612133010) do
 
   create_table "accesses", force: :cascade do |t|
     t.integer "user_id"
@@ -29,6 +29,22 @@ ActiveRecord::Schema.define(version: 20170610115621) do
     t.datetime "updated_at", null: false
     t.index ["todo_id"], name: "index_comments_on_todo_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "content"
+    t.string "targetable_type"
+    t.integer "targetable_id"
+    t.string "resultable_type"
+    t.integer "resultable_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "target_field"
+    t.string "result_field"
+    t.index ["resultable_type", "resultable_id"], name: "index_events_on_resultable_type_and_resultable_id"
+    t.index ["targetable_type", "targetable_id"], name: "index_events_on_targetable_type_and_targetable_id"
+    t.index ["user_id"], name: "index_events_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -65,6 +81,8 @@ ActiveRecord::Schema.define(version: 20170610115621) do
     t.integer "executor_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_todos_on_deleted_at"
     t.index ["project_id"], name: "index_todos_on_project_id"
   end
 

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  content: MyString
+  targetable: one
+  targetable_type: Targetable
+  resultable: one
+  resultable_type: Resultable
+  user: one
+
+two:
+  content: MyString
+  targetable: two
+  targetable_type: Targetable
+  resultable: two
+  resultable_type: Resultable
+  user: two

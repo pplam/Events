@@ -1,5 +1,6 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :set_todo, only: [:show, :edit, :update, :destroy, :assign_executor, :finish, :update_deadline]
 
   # GET /todos
   # GET /todos.json
@@ -25,6 +26,51 @@ class TodosController < ApplicationController
     @back_url = session[:previous_url] || @todo
   end
 
+  # PUT /todos/1/assign_executor
+  def assign_executor
+    pre_value = @todo.dup
+
+    @todo.update_attribute(:executor_id, params[:executor_id])
+
+    if @todo.executor_id != pre_value.executor_id
+      event = @todo.target_events.build(content: 'reset executor for todo', target_field: 'content', resultable_type: 'User', resultable_id: params[:executor_id], result_field: 'name')
+      event.user = current_user
+      event.save
+    end
+
+    redirect_back fallback_location: @todo.project
+  end
+
+  # PUT /todos/1/finish
+  def finish
+    pre_value = @todo.dup
+
+    @todo.update_attribute(:status, :finished)
+
+    if @todo.status !=pre_value.status
+      event = @todo.target_events.build(content: 'finish todo', target_field: 'content')
+      event.user = current_user
+      event.save
+    end
+
+    redirect_back fallback_location: @todo.project
+  end
+
+  # PUT /todos/1/update_deadline
+  def update_deadline
+    pre_value = @todo.dup
+
+    @todo.update_attribute(:deadline, "#{params['deadline(1i)']}-#{params['deadline(2i)']}-#{params['deadline(3i)']}")
+
+    if @todo.reload.deadline != pre_value.deadline
+      event = @todo.target_events.build(content: 'update deadline for todo', target_field: 'content', resultable_type: 'Todo', resultable_id: @todo.id, result_field: 'deadline')
+      event.user = current_user
+      event.save
+    end
+
+    redirect_back fallback_location: @todo
+  end
+
   # POST /todos
   # POST /todos.json
   def create
@@ -32,6 +78,17 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       if @todo.save
+        event = @todo.target_events.build(content: 'created todo', target_field: 'content')
+        event.user = current_user
+        event.save
+
+        if @todo.executor_id
+          event = @todo.target_events.build(content: 'assign executor for todo', target_field: 'content', resultable_type: 'User', resultable_id: params[:executor_id], result_field: 'name')
+          event.user = current_user
+          event.save
+        end
+
+
         format.html { redirect_to @todo, notice: 'Todo was successfully created.' }
         format.json { render :show, status: :created, location: @todo }
       else
@@ -45,8 +102,21 @@ class TodosController < ApplicationController
   # PATCH/PUT /todos/1.json
   def update
     respond_to do |format|
+      pre_value = @todo.dup
       if @todo.update(todo_params)
-        format.html { redirect_to @todo, notice: 'Todo was successfully updated.' }
+        if @todo.deadline != pre_value.deadline
+          event = @todo.target_events.build(content: 'update deadline for todo', target_field: 'content', resultable_type: 'Todo', resultable_id: @todo.id, result_field: 'deadline')
+          event.user = current_user
+          event.save
+        end
+
+        if @todo.executor_id != pre_value.executor_id
+          event = @todo.target_events.build(content: 'reset executor for todo', target_field: 'content', resultable_type: 'User', resultable_id: params[:executor_id], result_field: 'name')
+          event.user = current_user
+          event.save
+        end
+
+        format.html { redirect_back fallback_location: @todo, notice: 'Todo was successfully updated.' }
         format.json { render :show, status: :ok, location: @todo }
       else
         format.html { render :edit }
@@ -60,6 +130,11 @@ class TodosController < ApplicationController
   def destroy
     project = @todo.project
     @todo.destroy
+    @event = @todo.target_events.build(content: 'deleted todo', target_field: 'content')
+    @event.user = current_user
+    @err = @event.errors.messages
+    byebug
+    @event.save
     respond_to do |format|
       format.html { redirect_to project, notice: 'Todo was successfully destroyed.' }
       format.json { head :no_content }

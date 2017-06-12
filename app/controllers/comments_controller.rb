@@ -28,6 +28,10 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        event = @comment.todo.target_events.build(content: 'comment todo', target_field: 'content', resultable_type: 'Comment', resultable_id: @comment.id, result_field: 'content')
+        event.user = current_user
+        event.save
+
         format.html { redirect_to @comment.todo, notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else

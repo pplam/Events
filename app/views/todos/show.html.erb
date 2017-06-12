@@ -33,6 +33,17 @@
   </p>
 </div>
 
+<% if if_owner %>
+  <div class="container">
+    <div class="row">
+      <%= form_with url: update_deadline_path(id: @todo.id), method: :put, local: true, html: {class: "form-inline"} do |form| %>
+      <%= form.date_select :deadline, id: :todo_deadline, class: 'form-control form-control-lg' %>
+      <%= form.submit 'Update deadline', class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <br><br>
 
 <div class="container">
