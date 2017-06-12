@@ -22,7 +22,7 @@ $(document).on('turbolinks:load', () => {
 
     const lbs = fm.querySelectorAll('.flabel')
     Array.prototype.forEach.call(lbs, (lb) => {
-      lb.className = 'col-sm-1 col-form-label col-form-label-lg'
+      lb.className = 'col-sm-2 col-form-label col-form-label-lg'
     })
 
     const cts = fm.querySelectorAll('.fcontrol')

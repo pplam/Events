@@ -137,6 +137,12 @@
   </div>
 </div>
 
+<br><br>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<div class="container">
+  <div class="row">
+    <%= link_to 'Go back', teams_path, class: "btn btn-secondary btn-lg button button-outline-gray" %>
+    <%= link_to 'Edit registration', edit_user_registration_path(current_user), class: "btn btn-primary btn-lg button button-outline-blue" %>
+    <%= link_to 'Edit profile', edit_user_path(current_user), class: "btn btn-primary btn-lg button button-outline-blue" %>
+  </div>
+</div>

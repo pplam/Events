@@ -11,22 +11,18 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :user_name %>
+  <div class="ffield">
+    <%= form.label :name, class: 'flabel' %>
+    <%= form.text_field :name, id: :user_name, class: 'fcontrol' %>
   </div>
 
-  <div class="field">
-    <%= form.label :avatar %>
-    <%= form.text_field :avatar, id: :user_avatar %>
-  </div>
-
-  <div class="field">
-    <%= form.label :team_id %>
-    <%= form.text_field :team_id, id: :user_team_id %>
+  <div class="ffield">
+    <%= form.label :avatar, class: 'flabel' %>
+    <%= form.text_field :avatar, id: :user_avatar, class: 'fcontrol' %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit id: "submit" %>
+    <%= link_to 'Cancel', current_user, id: "cancel" %>
   </div>
 <% end %>
