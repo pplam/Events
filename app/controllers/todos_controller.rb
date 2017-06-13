@@ -83,7 +83,7 @@ class TodosController < ApplicationController
         event.save
 
         if @todo.executor_id
-          event = @todo.target_events.build(content: 'assign executor for todo', target_field: 'content', resultable_type: 'User', resultable_id: params[:executor_id], result_field: 'name')
+          event = @todo.target_events.build(content: 'assign executor for todo', target_field: 'content', resultable_type: 'User', resultable_id: @todo.executor_id, result_field: 'name')
           event.user = current_user
           event.save
         end

@@ -1,0 +1,9 @@
+<div class="row", style="background-color:#a65959;margin:5px;padding:0">
+  <div class="col-md-2">
+    <%= event.created_at %>
+  </div>
+  <div class="col-md-10">
+    <p><strong><%= event.user.name %></strong>  <%= event.content %>:  <%= event.targetable.send(event.target_field.to_sym) %></p>
+    <p><%= event.resultable.send(event.result_field.to_sym) if event.resultable %></p>
+  </div>
+</div>

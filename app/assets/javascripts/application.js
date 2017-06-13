@@ -4,6 +4,7 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require teams
+//= require cable.js
 
 $(document).on('turbolinks:load', () => {
   const tbs = document.getElementsByTagName('table')
